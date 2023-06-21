@@ -19,10 +19,11 @@ public class Main {
 		ArrayList<String> history = new ArrayList<>();
 		double totVersamenti = 0;
 		double totPrelievi = 0;
+		double totInteressi = 0;
 
-		ContoCorrente contoCorrente = new ContoCorrente("Mario Rossi", dataCC, 1000, history, totPrelievi, totVersamenti);
-		ContoDeposito contoDeposito = new ContoDeposito("Giuseppe Mberetto", dataCD, 500.45, history, totPrelievi, totVersamenti);
-		ContoInvestimento contoInvestimento = new ContoInvestimento("Loretta Goggi", dataCI, 150787, history, totPrelievi, totVersamenti);
+		ContoCorrente contoCorrente = new ContoCorrente("Mario Rossi", dataCC, 1000, history, totPrelievi, totVersamenti, totInteressi);
+		ContoDeposito contoDeposito = new ContoDeposito("Giuseppe Mberetto", dataCD, 500.45, history, totPrelievi, totVersamenti, totInteressi);
+		ContoInvestimento contoInvestimento = new ContoInvestimento("Loretta Goggi", dataCI, 150787, history, totPrelievi, totVersamenti, totInteressi);
 		
 //		contoCorrente.versa(500);
 //		contoDeposito.versa(300);

@@ -14,21 +14,21 @@ public class ContoCorrente extends Conto {
 
 	private static final double TASSO_CC = 0.05;
 	
-	public ContoCorrente(String titolare, LocalDate dataAperturaConto, double saldo, ArrayList<String> historyMovimenti, double totVersamenti, double totPrelievi) {
+	public ContoCorrente(String titolare, LocalDate dataAperturaConto, double saldo, ArrayList<String> historyMovimenti, double totVersamenti, double totPrelievi, double totInteressi) {
 		super(titolare, dataAperturaConto, saldo);
 	}
 
 	@Override
 	public void generaInteressi() {
 		double calcoloInteressi = getSaldo() * TASSO_CC;
-		setSaldo(getSaldo() + calcoloInteressi); // Aggiorna il saldo con gli interessi
+		totInteressi += calcoloInteressi;
 		setDataUltimaGenerazioneInteressi(LocalDate.now());
 	}
 
 	@Override
 	public void generaInteressi(LocalDate data) { // Modifica 1
 		double calcoloInteressi = (TASSO_CC / 365) * ChronoUnit.DAYS.between(getDataAperturaConto(), data); // differenza data apertura conto e data attuale
-		setSaldo(getSaldo() + calcoloInteressi);
+		totInteressi += calcoloInteressi;
 		setDataUltimaGenerazioneInteressi(data);
 	}
 
@@ -36,7 +36,7 @@ public class ContoCorrente extends Conto {
 	public void generaInteressiNuovaRegola(LocalDate data) { // Modifica 2
 		if (LocalDate.now().isAfter(getDataAperturaConto().plusYears(1))) {
 			double calcoloInteressi = (TASSO_CC / 365) * ChronoUnit.DAYS.between(getDataUltimaGenerazioneInteressi(), data);
-			setSaldo(getSaldo() + calcoloInteressi);
+			totInteressi += calcoloInteressi;
 			setDataUltimaGenerazioneInteressi(data);
 		}
 	}
@@ -44,6 +44,8 @@ public class ContoCorrente extends Conto {
 	@Override
 	public String stampaInfoConto() {
 		DecimalFormat df = new DecimalFormat("#.##");
+		aggiornaSaldo();
+		
 		return "=*=*= Informazioni sul Conto =*=*=\nTitolare: " + getTitolare() + "\nData apertura conto: "
 				+ getDataAperturaConto() + "\nTasso di interesse: " + TASSO_CC + "\nSaldo attuale: " + df.format(getSaldo())
 				+ "\nData dell'ultima generazione di interessi: " + getDataUltimaGenerazioneInteressi() + "\n\nStorico movimenti:\n" + getHistoryMovimenti() + "\n\nTotale versamenti (+):" + getTotVersamenti() + "\nTotale prelievi (-):" + getTotPrelievi();

@@ -15,8 +15,9 @@ public abstract class Conto {
 	protected ArrayList<String> historyMovimenti = new ArrayList<>();
 	protected double totVersamenti;
 	protected double totPrelievi;
+	protected double totInteressi;
 
-	public Conto(String titolare, LocalDate dataAperturaConto, double saldo, LocalDate dataUltimaGenerazioneInteressi, ArrayList<String> histoArrayList, double totVersamenti, double totPrelievi) {
+	public Conto(String titolare, LocalDate dataAperturaConto, double saldo, LocalDate dataUltimaGenerazioneInteressi, ArrayList<String> histoArrayList, double totVersamenti, double totPrelievi, double totInteressi) {
 		this.titolare = titolare;
 		this.dataAperturaConto = dataAperturaConto;
 		this.saldo = saldo;
@@ -24,6 +25,7 @@ public abstract class Conto {
 		this.historyMovimenti = historyMovimenti;
 		this.totVersamenti = totVersamenti;
 		this.totPrelievi = totPrelievi;
+		this.totInteressi = totInteressi;
 	}
 
 	public Conto(String titolare, LocalDate dataAperturaConto, double saldo) {
@@ -36,7 +38,7 @@ public abstract class Conto {
 	public void versa(double importo, LocalDate data) {
 		generaInteressiNuovaRegola(data);
 		setSaldo(getSaldo() + importo);
-		historyMovimenti.add("(" + LocalDate.now() + ") Versamento: (+)" + importo);	
+		historyMovimenti.add("[" + LocalDate.now() + "] Versamento:\t+\t" + importo);	
 		setTotVersamenti(getTotVersamenti() + importo);
 	}
 
@@ -45,11 +47,16 @@ public abstract class Conto {
 			generaInteressiNuovaRegola(data);
 			double saldoAggiornato = getSaldo() - importo;
 			setSaldo(saldoAggiornato);
-			historyMovimenti.add("[" + LocalDate.now() + "] Prelievo: (-)" + importo + "\n");	
+			historyMovimenti.add("[" + LocalDate.now() + "] Prelievo:\t-\t" + importo + "\n");	
 			setTotPrelievi(getTotPrelievi() + importo);
+		} else {
+			System.out.println("Cifra superiore al saldo! Impossibile prelevare.");
 		}
 	}
 	
+	public void aggiornaSaldo() {
+		setSaldo(getSaldo() + totInteressi);
+	}
 	
 	public abstract void generaInteressi();
 	public abstract void generaInteressi(LocalDate dataAperturaConto);

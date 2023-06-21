@@ -15,7 +15,7 @@ public class ContoInvestimento extends Conto {
 	
 	private double tassoInteresseInvestimento;
 
-	public ContoInvestimento(String titolare, LocalDate dataAperturaConto, double saldo, ArrayList<String> historyMovimenti, double totVersamenti, double totPrelievi) {
+	public ContoInvestimento(String titolare, LocalDate dataAperturaConto, double saldo, ArrayList<String> historyMovimenti, double totVersamenti, double totPrelievi, double totInteressi) {
 		super(titolare, dataAperturaConto, saldo);
 	}
 
@@ -25,7 +25,7 @@ public class ContoInvestimento extends Conto {
         double tasso = random.nextDouble() * 201 - 100;
         setTassoInteresseInvestimento(tasso);
 		double calcoloInteressi = getSaldo() * getTassoInteresseInvestimento();
-		setSaldo(getSaldo() + calcoloInteressi); // Aggiorna il saldo con gli interessi
+		totInteressi += calcoloInteressi;
 		setDataUltimaGenerazioneInteressi(LocalDate.now());
 	}
 
@@ -37,6 +37,7 @@ public class ContoInvestimento extends Conto {
 	@Override
 	public String stampaInfoConto() {
 		DecimalFormat df = new DecimalFormat("#.##");
+		aggiornaSaldo();
 		return "=*=*= Informazioni sul Conto =*=*=\nTitolare: " + getTitolare() + "\nData apertura conto: " + getDataAperturaConto() + "\nTasso di interesse: " + df.format(getTassoInteresseInvestimento()) + "\nSaldo attuale: " +df.format(getSaldo()) + "\nData dell'ultima generazione di interessi: " +getDataUltimaGenerazioneInteressi() + "\n\nStorico movimenti:\n" + getHistoryMovimenti() + "\n\nTotale versamenti (+):" + getTotVersamenti() + "\nTotale prelievi (-):" + getTotPrelievi();
 	}
 	
