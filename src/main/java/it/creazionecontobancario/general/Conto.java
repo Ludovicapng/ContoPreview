@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -59,7 +60,7 @@ public abstract class Conto {
 		setSaldo(getSaldo() + importo);
 		historyMovimenti.add("[" + LocalDate.now() + "] Versamento:\t+\t" + importo);
 		setTotVersamenti(getTotVersamenti() + importo);
-		istanza.insertOperazione(getIdConto(), LocalDate.now(),"VER",importo);
+		istanza.insertOperazione(getIdConto(),LocalDate.now(),"VER",importo);
 		
 	}
 
@@ -93,26 +94,20 @@ public abstract class Conto {
 	}
 
 	// Metodo generale per recuperare il tasso di CC e CD in base al parametro
-	public double getTasso(String id_conto) {
-		ConnessioneDBbanca istanza = ConnessioneDBbanca.getInstance();
-		double tasso = 0;
-		
-		try {
-			Connection connessione = istanza.getConnection();
-			String query = "SELECT tasso FROM tipo_conto WHERE codice = ?";
-			try (PreparedStatement statement = connessione.prepareStatement(query)) {
-				statement.setString(1, id_conto); // Inserisci l'id del conto corretto
-				try (ResultSet resultSet = statement.executeQuery()) {
-					if (resultSet.next()) {
-						tasso = resultSet.getDouble("tasso");
-					}
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return tasso;
+	public double getTasso(String stringa) {
+		double tasso = 0.0;
+        try (Connection connection = istanza.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT tasso FROM tipo_conto WHERE codice = ?")) {
+               statement.setString(1, stringa); 
+               ResultSet resultSet = statement.executeQuery();
+               if (resultSet.next()) {
+                   tasso = resultSet.getDouble("tasso");
+               }
+           } catch (SQLException e) {
+               e.printStackTrace();
+           }
 
+           return tasso; 
 	}
 
 	public abstract void generaInteressi();

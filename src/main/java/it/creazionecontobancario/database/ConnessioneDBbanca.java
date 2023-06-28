@@ -155,12 +155,13 @@ public class ConnessioneDBbanca extends Conto {
             statement.setDate(2, data_operazione);
             statement.setString(3, codice_operazione);
             statement.setDouble(4, quantita);
-            if (codice_operazione.equalsIgnoreCase("VER")) {
-                double saldo = getSaldo() + quantita;
-                statement.setDouble(5, saldo);
-            } else if (codice_operazione.equalsIgnoreCase("PRE")) {
+            if (codice_operazione.equals("VER")) {
+                setSaldo(getSaldo() + quantita);
+            } else if (codice_operazione.equals("PRE")) {
                 double saldo = getSaldo() - quantita;
-                statement.setDouble(5, saldo);
+                if (getSaldo() > quantita) {
+                    setSaldo(getSaldo() - quantita);
+                }
             }
             statement.executeUpdate();
 

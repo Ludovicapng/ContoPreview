@@ -19,7 +19,7 @@ public class Main {
 		LocalDate dataCI = LocalDate.of(2012, 6, 12);
 		ConnessioneDBbanca db = ConnessioneDBbanca.getInstance();
 
-		Correntista c = new Correntista(4, "Mauro", "Giringelli", "Torino", "Italia", "111111111111");
+		Correntista c = new Correntista(4, "Antonio", "Giringelli", "Torino", "Italia", "111111111111");
 
 		ContoCorrente contoCorrente = new ContoCorrente(4, c, dataCI, 0);
 		
@@ -59,13 +59,15 @@ public class Main {
 //		contoCorrente.versa(999);
 //		System.out.println(contoCorrente.stampaInfoConto());
 		
-		contoCorrente.setDataUltimaGenerazioneInteressi(dataCC);
-		contoCorrente.preleva(900, dataGenerazioneInteressiCC);
-		System.out.println(contoCorrente.stampaInfoConto());
-		contoCorrente.versa(400, dataGenIntCC);
-		System.out.println("\n" +contoCorrente.stampaInfoConto());
 
-		contoCorrente.stampaSuPdf(3);
+//		contoCorrente.setDataUltimaGenerazioneInteressi(dataCC);
+//		contoCorrente.preleva(900, dataGenerazioneInteressiCC);
+//		System.out.println(contoCorrente.stampaInfoConto());
+//		contoCorrente.versa(400, dataGenIntCC);
+//		System.out.println("\n" +contoCorrente.stampaInfoConto());
+//
+//		contoCorrente.stampaSuPdf(3);
+		
 //		contoDeposito.stampaSuPdf();
 //		contoInvestimento.stampaSuPdf();
 	
