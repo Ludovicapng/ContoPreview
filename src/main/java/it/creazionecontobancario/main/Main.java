@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import com.itextpdf.text.log.SysoCounter;
 
 import it.creazionecontobancario.general.ContoInvestimento;
+import it.creazionecontobancario.general.Correntista;
 import it.creazionecontobancario.general.ContoDeposito;
+import it.creazionecontobancario.database.ConnessioneDBbanca;
 import it.creazionecontobancario.general.ContoCorrente;
 
 public class Main {
@@ -15,15 +17,14 @@ public class Main {
 		LocalDate dataCC = LocalDate.of(2022, 01, 1);
 		LocalDate dataCD = LocalDate.of(2022, 12, 31);
 		LocalDate dataCI = LocalDate.of(2012, 6, 12);
-		
-		ArrayList<String> history = new ArrayList<>();
-		double totVersamenti = 0;
-		double totPrelievi = 0;
-		double totInteressi = 0;
+		ConnessioneDBbanca db = ConnessioneDBbanca.getInstance();
 
-		ContoCorrente contoCorrente = new ContoCorrente("Mario Rossi", dataCC, 1000, history, totPrelievi, totVersamenti, totInteressi);
-		ContoDeposito contoDeposito = new ContoDeposito("Giuseppe Mberetto", dataCD, 500.45, history, totPrelievi, totVersamenti, totInteressi);
-		ContoInvestimento contoInvestimento = new ContoInvestimento("Loretta Goggi", dataCI, 150787, history, totPrelievi, totVersamenti, totInteressi);
+		Correntista c = new Correntista(4, "Mauro", "Giringelli", "Torino", "Italia", "111111111111");
+
+		ContoCorrente contoCorrente = new ContoCorrente(4, c, dataCI, 0);
+		
+//		ContoDeposito contoDeposito = new ContoDeposito("Giuseppe Mberetto", dataCD, 500.45);
+//		ContoInvestimento contoInvestimento = new ContoInvestimento("Loretta Goggi", dataCI, 150787);
 		
 //		contoCorrente.versa(500);
 //		contoDeposito.versa(300);
@@ -64,10 +65,10 @@ public class Main {
 		contoCorrente.versa(400, dataGenIntCC);
 		System.out.println("\n" +contoCorrente.stampaInfoConto());
 
-		
-		contoCorrente.stampaSuPdf();
-		contoDeposito.stampaSuPdf();
-		contoInvestimento.stampaSuPdf();
+		contoCorrente.stampaSuPdf(3);
+//		contoDeposito.stampaSuPdf();
+//		contoInvestimento.stampaSuPdf();
 	
+//		db.insertCorrentista("Mauro", "Giringelli", "Torino", "Italia", "111111111111");		
 	}
 }

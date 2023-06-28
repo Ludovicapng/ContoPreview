@@ -1,7 +1,9 @@
 package it.creazionecontobancario.general;
 
 import java.io.FileNotFoundException;
+
 import java.io.FileOutputStream;
+import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.*;
@@ -11,21 +13,25 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import it.creazionecontobancario.database.ConnessioneDBbanca;
+import it.creazionecontobancario.general.Correntista;
+
 public class ContoInvestimento extends Conto {
 	
 	private double tassoInteresseInvestimento;
 
-	public ContoInvestimento(String titolare, LocalDate dataAperturaConto, double saldo, ArrayList<String> historyMovimenti, double totVersamenti, double totPrelievi, double totInteressi) {
-		super(titolare, dataAperturaConto, saldo);
+	public ContoInvestimento(Correntista correntista, LocalDate dataAperturaConto, double saldo) {
+		super(correntista, dataAperturaConto, saldo);
 	}
 
 	@Override
 	public void generaInteressi() {
 		Random random = new Random();
         double tasso = random.nextDouble() * 201 - 100;
+        
         setTassoInteresseInvestimento(tasso);
 		double calcoloInteressi = getSaldo() * getTassoInteresseInvestimento();
-		totInteressi += calcoloInteressi;
+		setTotInteressi(getTotInteressi() + calcoloInteressi);
 		setDataUltimaGenerazioneInteressi(LocalDate.now());
 	}
 

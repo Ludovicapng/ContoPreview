@@ -1,6 +1,7 @@
 package it.creazionecontobancario.general;
 
 import java.io.FileNotFoundException;
+
 import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
@@ -12,33 +13,35 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import it.creazionecontobancario.general.Correntista;
+
 public class ContoDeposito extends Conto {
 	
-	private static final double TASSO_CD = 0.10;
-	
-	public ContoDeposito(String titolare, LocalDate dataAperturaConto, double saldo, ArrayList<String> historyMovimenti, double totVersamenti, double totPrelievi, double totInteressi) {
-		super(titolare, dataAperturaConto, saldo);
+	double tasso = getTasso("CD");
+
+	public ContoDeposito(Correntista correntista, LocalDate dataAperturaConto, double saldo) {
+		super(correntista, dataAperturaConto, saldo);
 	}
 
 	@Override
 	public void generaInteressi() { // generaInteressi base
-		double calcoloInteressi = getSaldo() * TASSO_CD;
-		totInteressi += calcoloInteressi;
+		double calcoloInteressi = getSaldo() * tasso;
+		setTotInteressi(getTotInteressi() + calcoloInteressi);
 		setDataUltimaGenerazioneInteressi(LocalDate.now());
 	}
 	
 	@Override
 	public void generaInteressi(LocalDate data) { // Modifica 1
-		double calcoloInteressi = (TASSO_CD / 365) * ChronoUnit.DAYS.between(getDataAperturaConto(), data); // differenza data apertura conto e data inserita
-		totInteressi += calcoloInteressi;
+		double calcoloInteressi = (tasso / 365) * ChronoUnit.DAYS.between(getDataAperturaConto(), data); // differenza data apertura conto e data inserita
+		setTotInteressi(getTotInteressi() + calcoloInteressi);
 		setDataUltimaGenerazioneInteressi(data);
 	}
 	
 	@Override
 	public void generaInteressiNuovaRegola(LocalDate data) { // Modifica 2
 		if (LocalDate.now().isAfter(getDataAperturaConto().plusYears(1))) {
-			double calcoloInteressi = (TASSO_CD / 365) * ChronoUnit.DAYS.between(getDataUltimaGenerazioneInteressi(), data);
-			totInteressi += calcoloInteressi;
+			double calcoloInteressi = (tasso / 365) * ChronoUnit.DAYS.between(getDataUltimaGenerazioneInteressi(), data);
+			setTotInteressi(getTotInteressi() + calcoloInteressi);
 			setDataUltimaGenerazioneInteressi(LocalDate.now());
 		}
 	}
@@ -48,7 +51,7 @@ public class ContoDeposito extends Conto {
 		aggiornaSaldo();
 		
 		return "=*=*= Informazioni sul Conto =*=*=\nTitolare: " + getTitolare() + "\nData apertura conto: "
-				+ getDataAperturaConto() + "\nTasso di interesse: " + TASSO_CD + "\nSaldo attuale: " + df.format(getSaldo())
+				+ getDataAperturaConto() + "\nTasso di interesse: " + tasso + "\nSaldo attuale: " + df.format(getSaldo())
 				+ "\nData dell'ultima generazione di interessi: " + getDataUltimaGenerazioneInteressi() + "\n\nStorico movimenti:\n" + getHistoryMovimenti() + "\n\nTotale versamenti (+):" + getTotVersamenti() + "\nTotale prelievi (-):" + getTotPrelievi();
 	}
 
