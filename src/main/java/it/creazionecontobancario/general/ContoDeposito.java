@@ -57,9 +57,16 @@ public class ContoDeposito extends Conto {
 
 	
 	@Override
-	public void stampaSuPdf() {
+	public void stampaSuPdf(int id_conto, Correntista c) {
+		String codice_tipo = "CD";
+	    LocalDate data = LocalDate.now();
+	    String dataFormatted = data.toString();
+	    
 		Document contoDepositoDOC = new Document();
-		String path = "/Users/ludo/Desktop/ContoDepositoDOC.pdf";
+
+	    String fileName = "EC_" + codice_tipo + "_" + c.getCognome() + "_" + id_conto + "_" + dataFormatted + ".pdf";
+	    String path = "/Users/ludo/Desktop/" + fileName;
+
 		
 		try {
 			PdfWriter writer = PdfWriter.getInstance(contoDepositoDOC, new FileOutputStream(path));

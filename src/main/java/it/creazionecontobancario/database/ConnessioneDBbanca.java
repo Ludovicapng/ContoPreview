@@ -8,6 +8,7 @@ import java.util.*;
 import javax.lang.model.element.QualifiedNameable;
 
 import it.creazionecontobancario.general.Conto;
+import it.creazionecontobancario.general.Correntista;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -189,7 +190,7 @@ public class ConnessioneDBbanca extends Conto {
 	}
 
 	@Override
-	public void stampaSuPdf() {
+	public void stampaSuPdf(int id_conto, Correntista c) {
 		// TODO Auto-generated method stub
 		
 	}

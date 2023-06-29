@@ -116,7 +116,7 @@ public abstract class Conto {
 
 	public abstract String stampaInfoConto();
 
-	public abstract void stampaSuPdf();
+	public abstract void stampaSuPdf(int id_conto, Correntista c);
 
 	public abstract void generaInteressiNuovaRegola(LocalDate data);
 

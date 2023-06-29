@@ -60,41 +60,15 @@ public class ContoCorrente extends Conto {
 				+ "\nData dell'ultima generazione di interessi: " + getDataUltimaGenerazioneInteressi() + "\n\nStorico movimenti:\n" + getHistoryMovimenti() + "\n\nTotale versamenti (+):" + getTotVersamenti() + "\nTotale prelievi (-):" + getTotPrelievi();
 	}
 	
-	public void stampaSuPdf(int id_conto) {
+	public void stampaSuPdf(int id_conto, Correntista c) {
 		
-		// Aggiungere il recupero dei dati dal DB per stampare su pdf
-		
-		ConnessioneDBbanca istanza = ConnessioneDBbanca.getInstance();
-		
-	    String codice = null;
-	    String cognome = null;
-	    String codice_tipo = null;
+		String codice_tipo = "CC";
 	    LocalDate data = LocalDate.now();
 	    String dataFormatted = data.toString();
 	    
-	    try (Connection connection = istanza.getConnection()) {
-	    	String query = "SELECT c.codice_tipo, co.cognome, cc.id_conto " +
-	                "FROM conto c " +
-	                "JOIN conto_correntista cc ON c.id_conto = cc.id_conto " +
-	                "JOIN correntista co ON cc.id_correntista = co.id_correntista " +
-	                "WHERE c.id_conto = ?";
-	       
-	        try (PreparedStatement statement = connection.prepareStatement(query)) {
-	            statement.setInt(1, id_conto);
-	            try (ResultSet resultSet = statement.executeQuery()) {
-	                if (resultSet.next()) {
-	                    codice_tipo = resultSet.getString("tipo_conto");
-	                    cognome = resultSet.getString("cognome");
-	                    id_conto = resultSet.getInt("id_conto");
-	                }
-	            }
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
 		Document contoCorrenteDOC = new Document();
 
-	    String fileName = "EC_" + codice_tipo + "_" + cognome + "_" + id_conto + "_" + dataFormatted + ".pdf";
+	    String fileName = "EC_" + codice_tipo + "_" + c.getCognome() + "_" + id_conto + "_" + dataFormatted + ".pdf";
 	    String path = "/Users/ludo/Desktop/" + fileName;
 
 		
@@ -109,12 +83,6 @@ public class ContoCorrente extends Conto {
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		}
-	}
-
-
-	@Override
-	public void stampaSuPdf() {
-		
 	}
 
 }
